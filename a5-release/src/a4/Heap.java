@@ -59,10 +59,12 @@ public class Heap<E, P> implements PriorityQueue<E, P> {
 		if (size() == 0)
 			throw new NoSuchElementException();
 		E toBeReturned = arr.get(0);
-		arr.set(0, arr.remove(size() - 1));
-		map.remove(toBeReturned);
-		elmAt(0).setIndex(0);
-		heapifyDown(0);
+		if (size() > 1) {
+			arr.set(0, arr.remove(size() - 1));
+			map.remove(toBeReturned);
+			elmAt(0).setIndex(0);
+			heapifyDown(0);
+		}
 		return toBeReturned;
 	}
 
