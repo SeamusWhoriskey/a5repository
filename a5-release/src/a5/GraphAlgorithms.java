@@ -104,6 +104,7 @@ public class GraphAlgorithms  {
 				break; 	
 			}
 			
+			
 			unvisited.remove(node_curr);
 			
 			for (N neighbor : node_curr.outgoing().keySet()) {
