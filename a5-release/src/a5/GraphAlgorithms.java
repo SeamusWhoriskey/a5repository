@@ -155,7 +155,7 @@ public class GraphAlgorithms  {
 		while (!out_list.contains(start)) {
 			last_added = parents.get(last_added);
 			if (last_added == null) {
-				return out_list;
+				return new ArrayList<N>();
 			}
 			out_list.add(last_added);
 			
