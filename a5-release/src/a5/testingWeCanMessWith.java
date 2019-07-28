@@ -22,7 +22,7 @@ import gui.TextIO;
 public class testingWeCanMessWith {
 
 	// PASSED
-	@Test
+//	@Test
 	/** Get a two-node graph with two nodes "Ithaca" and "Truck Depot" and no edges. <br>
 	 * Test a 1-node path from Ithaca to Ithaca and <br>
 	 * an empty shortest path from Ithaca to Truck Depot */
@@ -37,7 +37,7 @@ public class testingWeCanMessWith {
 		// System.out.println("Random: "+new Random(128).nextInt());
 	}
 	// PASSED
-	@Test
+//	@Test
 	/** Get a two-node graph with two nodes "Ithaca" and "Truck Depot" and no edges. <br>
 	 * Test a 1-node path from Ithaca to Ithaca and <br>
 	 * an empty shortest path from Ithaca to Truck Depot */
@@ -95,7 +95,7 @@ public class testingWeCanMessWith {
 		checkAllShortestPaths(g, pd);
 	}
 
-//	@Test
+	@Test
 	/** Test all shortest paths on map seed16.txt */
 	public void test50MapSeed16() {
 		System.out.println("\n Test 5");
@@ -115,7 +115,7 @@ public class testingWeCanMessWith {
 		checkAllShortestPaths(g, pd);
 	}
 
-//	@Test
+	@Test
 	/** Test all shortest paths on map ...t */
 	public void test70MapTestBoard2() {
 		System.out.println("\n Test 7");
@@ -125,7 +125,7 @@ public class testingWeCanMessWith {
 		checkAllShortestPaths(g, pd);
 	}
 
-//	@Test
+	@Test
 	/** Test all shortest paths on map seeded with 128 */
 	public void test80MapSeeded128() {
 		System.out.println("\n Test 8");

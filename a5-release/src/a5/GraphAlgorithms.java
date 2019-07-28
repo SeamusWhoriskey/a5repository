@@ -57,77 +57,72 @@ public class GraphAlgorithms  {
 	 */
 	public static <N extends Node<N,E>, E extends LabeledEdge<N,E,Integer>>
 	List<N> shortestPath(N start, N end) {
-		System.out.println(start.toString() + " " + end.toString());
+//		System.out.println(start.toString() + " " + end.toString());
+		if (start.equals(end)) {
+			List<N> out_list = new ArrayList<N>();
+			out_list.add(start);
+			return out_list;
+		}
 		// To check the neighbors of a node n use:
 		// n.outgoing().keySet()
 		
 		// Set containing all the visited nodes.
 		// To check if a node n is unvisited use:
 		// !visited.contains(n)
-		Set<N> visited = new HashSet<N>();
-		visited.add(start);
+		Set<N> unvisited = new HashSet<N>(dfs(start));
 		// distances stores the distance from the start Node to Node N as a double.
 		HashMap<N, Double> 	distances 	= new HashMap<N, Double>();
-		distances.put(start, 0.0);
-		for (N neighbor : start.outgoing().keySet()) {
-			distances.put(neighbor, getEdgeWeight(neighbor, start));	
-		}
+		
 		// parents stores the parent of a Node n as a Node.
 		HashMap<N, N> 		parents 	= new HashMap<N, N>();
-		for (N neighbor : start.outgoing().keySet()) {
-			parents.put(neighbor, start);	
+		for (N neighbor : unvisited) {
+			distances.put(neighbor, Double.POSITIVE_INFINITY);	
+			parents.put(neighbor, null);	
 		}
-		System.out.println(parents.toString());
+		distances.put(start, 0.0);
 		// node_curr is the current node of Dijkstra's algorithm.
-		N node_curr = start;
+		N node_curr;
 		// neighbor_dist is a Heap that will contain the distance from curr_node to each neighbor 
 		Heap<N, Double> neighbor_dist = new Heap<N, Double>(Comparator.reverseOrder());
 		// path complete ADSLFHADHJFBLA
 		boolean path_complete = true;
 		
-		while (!visited.contains(end)) {
-			// Initializing a value for each item in distances.
-			for (N neighbor : node_curr.outgoing().keySet()) {
-				if (!distances.containsKey(neighbor)) {
-					distances.put(neighbor, Double.POSITIVE_INFINITY);
-				}
-				if (neighbor == end) {
-					parents.put(end, node_curr);
-					break;
-				}
-			}
-			neighbor_dist = getWeightHeap(node_curr, visited);
+		while (!unvisited.isEmpty()) {
+			
+			
+			neighbor_dist = getWeightHeap(distances, unvisited);
+			// If there are no unvisited nodes that are a neighbor of the current node,
 			if (neighbor_dist.size() == 0) {
 				path_complete = false;
 				break; 	
 			}
-			N node_min = neighbor_dist.poll();
+			node_curr = neighbor_dist.poll();
 
-			
-			if (getEdgeWeight(node_curr, node_min) == Double.POSITIVE_INFINITY) {	
+			// If the current node's closest neighbor is not connected, pass
+			if (distances.get(node_curr) == Double.POSITIVE_INFINITY) {
 				path_complete = false;
 				break; 	
 			}
-			for (N neighbor : node_min.outgoing().keySet()) {
-				if (!visited.contains(neighbor)) {
-					double new_weight = distances.get(node_min) + getEdgeWeight(node_min, neighbor);
-					if (new_weight < distances.get(neighbor)) {
+			
+			unvisited.remove(node_curr);
+			
+			for (N neighbor : node_curr.outgoing().keySet()) {
+				if (unvisited.contains(neighbor)) {
+					double new_weight = distances.get(node_curr) + getEdgeWeight(node_curr, neighbor);
+					if (!distances.containsKey(neighbor) || new_weight < distances.get(neighbor))  {
 						distances.put(neighbor, new_weight);
-						parents.put(neighbor, node_min);
-						System.out.println(parents.toString());
+						parents.put(neighbor, node_curr);
 					}
 				}
 			}
-			visited.add(node_min);
-			node_curr = node_min;
-			System.out.println(visited.toString());
+//			System.out.println("unvisited list: "+ unvisited.toString());
 
 			
 		}
 		
 		if (path_complete) {
 			List<N> n = parentsToList(parents, start, end);
-			System.out.println(n.toString());
+//			System.out.println("Out list: " + n.toString());
 			return n;
 		}
 //		System.out.println(path_complete);
@@ -144,12 +139,10 @@ public class GraphAlgorithms  {
 	/** Returns a heap of nodes with priority of edge weight of the edge 
 	 * between node_from and its neighbors that are not in the Set vis. */
 	private static <N extends Node<N,E>, E extends LabeledEdge<N,E,Integer>>
-	Heap<N, Double> getWeightHeap(N node_from, Set<N> vis) {
+	Heap<N, Double> getWeightHeap(HashMap<N, Double> dist, Set<N> unvis) {
 		Heap<N, Double> n_dist 	= new Heap<N, Double>(Comparator.reverseOrder());
-		for (N neighbor : node_from.outgoing().keySet()) {
-			if (!vis.contains(neighbor)) {
-				n_dist.add(neighbor, getEdgeWeight(node_from, neighbor));
-			}
+		for (N neighbor : unvis) {
+			n_dist.add(neighbor, dist.get(neighbor));
 		}
 		return n_dist;
 	}
@@ -159,10 +152,15 @@ public class GraphAlgorithms  {
 		List<N> out_list = new ArrayList<N>();
 		out_list.add(end);
 		N last_added = end;
-		System.out.println(last_added);
 		while (!out_list.contains(start)) {
 			last_added = parents.get(last_added);
+			if (last_added == null) {
+				return out_list;
+			}
 			out_list.add(last_added);
+			
+
+//			System.out.println(out_list.toString());
 		}
 		Collections.reverse(out_list);
 		return out_list;
