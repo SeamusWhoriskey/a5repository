@@ -32,6 +32,12 @@ public class Heap<E, P> implements PriorityQueue<E, P> {
 		map = new HashMap<E, Element>();
 	}
 	
+	/** Helper method (added for a5) to get priority of an element. */
+	public P getPriority(E e) {
+		Element el = map.get(e);
+		return el.priority();
+	}
+	
 	/*
 	 * Returns the comparator used for priorities
 	 */
