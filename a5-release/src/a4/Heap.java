@@ -38,6 +38,15 @@ public class Heap<E, P> implements PriorityQueue<E, P> {
 		return el.priority();
 	}
 	
+	/** @return a string representing the max heap. */
+	public String toString() {
+		String out_str = new String();
+		for (E e : this.arr) {
+			out_str += e.toString() + ": " + getPriority(e).toString();
+		}
+		return out_str;
+	}
+	
 	/*
 	 * Returns the comparator used for priorities
 	 */
