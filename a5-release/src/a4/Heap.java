@@ -42,7 +42,7 @@ public class Heap<E, P> implements PriorityQueue<E, P> {
 	public String toString() {
 		String out_str = new String();
 		for (E e : this.arr) {
-			out_str += e.toString() + ": " + getPriority(e).toString();
+			out_str += e.toString() + ": " + getPriority(e).toString() +"\n";
 		}
 		return out_str;
 	}
